@@ -4,6 +4,7 @@
 
 import { ProtectedRoute } from '@/components/ui/ProtectedRoute';
 import { ProfileForm } from '@/components/profile/ProfileForm';
+import { ResumeUpload } from '@/components/profile/ResumeUpload';
 import { MatchScore } from '@/components/profile/MatchScore';
 import { RecommendedJobs } from '@/components/profile/RecommendedJobs';
 
@@ -20,6 +21,7 @@ export default function ProfilePage() {
         <div className="grid gap-8 lg:grid-cols-[1fr_280px]">
           <div className="space-y-8">
             <ProfileForm />
+            <ResumeUpload />
             <RecommendedJobs />
           </div>
           <aside className="lg:sticky lg:top-20 lg:self-start">

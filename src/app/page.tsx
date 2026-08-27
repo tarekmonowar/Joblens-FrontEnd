@@ -2,21 +2,25 @@ import { Hero } from '@/components/landing/Hero';
 import { LiveTicker } from '@/components/landing/LiveTicker';
 import { LandingChartsRow } from '@/components/landing/LandingChartsRow';
 import { HeroVideo } from '@/components/landing/HeroVideo';
-import { StatsRow } from '@/components/landing/StatsRow';
+import { HowItWorks } from '@/components/landing/HowItWorks';
+import { ResumeAiShowcase } from '@/components/landing/ResumeAiShowcase';
 import { FeatureShowcase } from '@/components/landing/FeatureShowcase';
+import { CtaBanner } from '@/components/landing/CtaBanner';
 
-/** Landing page — live counter, ticker, charts, stats, and feature grid. */
+/** Landing page — first screen is hero + live ticker; resume AI and the rest follow. */
 export default function Home() {
   return (
     <>
-      <Hero />
-      <LiveTicker />
-      <LandingChartsRow />
-      <HeroVideo />
-      <div className="py-12">
-        <StatsRow />
+      <div className="flex min-h-dvh flex-col">
+        <Hero />
+        <LiveTicker />
       </div>
+      <ResumeAiShowcase />
+      <HeroVideo />
+      <HowItWorks />
+      <LandingChartsRow />
       <FeatureShowcase />
+      <CtaBanner />
     </>
   );
 }

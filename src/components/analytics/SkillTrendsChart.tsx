@@ -89,7 +89,7 @@ export function SkillTrendsChart() {
       : data.series.map((s) => s.skill);
 
   return (
-    <Card>
+    <Card className="h-full w-full">
       <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <CardTitle>Skill trends</CardTitle>

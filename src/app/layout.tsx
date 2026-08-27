@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   },
   description:
     'Real-time Bangladesh job-market intelligence for software developers.',
+  icons: {
+    icon: [{ url: '/favicon.png', type: 'image/png' }],
+    apple: '/favicon.png',
+  },
 };
 
 /**

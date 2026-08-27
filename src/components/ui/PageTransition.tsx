@@ -28,7 +28,7 @@ export function PageTransition({ children }: PageTransitionProps) {
   const reduceMotion = useReducedMotion();
   const isAuth = AUTH_PATHS.has(pathname);
 
-  const shellClass = cn('flex flex-1 flex-col', isAuth && 'min-h-[calc(100dvh-3.5rem)]');
+  const shellClass = cn('flex flex-1 flex-col', isAuth && 'min-h-dvh');
 
   if (reduceMotion) {
     return <div className={shellClass}>{children}</div>;

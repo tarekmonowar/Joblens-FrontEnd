@@ -41,7 +41,7 @@ export function LiveTicker() {
 
   if (isLoading && jobs.length === 0) {
     return (
-      <div className="border-y bg-muted/40 py-3">
+      <div className="shrink-0 border-y bg-muted/40 py-3">
         <Skeleton className="mx-auto h-6 w-full max-w-4xl" />
       </div>
     );
@@ -53,7 +53,7 @@ export function LiveTicker() {
   const items = [...jobs, ...jobs];
 
   return (
-    <div className="border-y bg-muted/40 py-3" aria-label="Recently posted jobs">
+    <div className="shrink-0 border-y bg-muted/40 py-3" aria-label="Recently posted jobs">
       <div className="overflow-hidden">
         <div className="animate-marquee flex w-max gap-8 whitespace-nowrap px-4">
           {items.map((job, i) => (

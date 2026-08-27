@@ -37,6 +37,7 @@ export const queryKeys = {
     demandIndex: () => ['an', 'demandIndex'] as const,
   },
   me: () => ['me'] as const,
+  resume: () => ['resume'] as const,
   matchScore: () => ['matchScore'] as const,
   recommendations: () => ['recs'] as const,
   admin: {

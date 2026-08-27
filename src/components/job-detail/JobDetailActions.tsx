@@ -1,8 +1,9 @@
 'use client';
 
-// Apply · original post · share — grouped on the left.
+// Customize resume · apply · original post · share — grouped on the left.
 
 import { ApplyButton } from '@/components/job-detail/ApplyButton';
+import { CustomizeResumeButton } from '@/components/job-detail/CustomizeResumeButton';
 import { OriginalPostLink } from '@/components/job-detail/OriginalPostLink';
 import { ShareButton } from '@/components/job-detail/ShareButton';
 import { cn } from '@/lib/utils';
@@ -17,6 +18,7 @@ type JobDetailActionsProps = {
 export function JobDetailActions({ job, className }: JobDetailActionsProps) {
   return (
     <div className={cn('flex flex-wrap items-center gap-2', className)}>
+      <CustomizeResumeButton jobId={job.id} />
       <ApplyButton job={job} />
       <OriginalPostLink sourceUrl={job.sourceUrl} />
       <ShareButton jobId={job.id} title={job.title} />

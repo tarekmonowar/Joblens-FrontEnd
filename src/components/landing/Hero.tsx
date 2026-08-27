@@ -34,7 +34,7 @@ export function Hero() {
   const waitingForCount = isLoading && overview === undefined;
 
   return (
-    <section className="relative overflow-hidden px-4 py-20 sm:py-28">
+    <section className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden px-4 pb-8 pt-24 sm:pb-10 sm:pt-28">
       {/* Sharp full-bleed photo — no blur on the hero itself */}
       <div
         className="pointer-events-none absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
@@ -69,7 +69,7 @@ export function Hero() {
           deduplicated for Bangladesh&apos;s software developer community.
         </p>
 
-        <div className="mt-10 flex flex-col items-center gap-2">
+        <div className="mt-6 flex flex-col items-center gap-2 sm:mt-8">
           {waitingForCount ? (
             <Skeleton className="h-14 w-48" />
           ) : (
@@ -83,7 +83,7 @@ export function Hero() {
           </p>
         </div>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-8">
           <Button asChild size="lg" className="gap-2">
             <Link href="/jobs">
               Browse jobs
