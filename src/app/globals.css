@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
 /* ── Design tokens (brand palette + shadcn semantic colors) ── */
 :root {

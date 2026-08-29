@@ -5,6 +5,7 @@
 import { useEffect, type ReactNode } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
+import { SmoothScroll } from '@/components/ui/SmoothScroll';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { queryClient, queryKeys } from '@/lib/queryClient';
 import { connectSocket, disconnectSocket, getSocket } from '@/lib/socket';
@@ -82,6 +83,7 @@ export function Providers({ children }: ProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <SmoothScroll />
       <TooltipProvider>
         {children}
         <Toaster
