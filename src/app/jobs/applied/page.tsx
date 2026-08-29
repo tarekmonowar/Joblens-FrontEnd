@@ -91,7 +91,7 @@ export default function AppliedJobsPage() {
 
   return (
     <ProtectedRoute fallback={fallback}>
-      <div className="mx-auto max-w-4xl px-4 py-8">
+      <div className="mx-auto w-full max-w-4xl px-4 py-8">
         <h1 className="mb-2 text-2xl font-bold">Applied jobs</h1>
         <p className="mb-6 text-sm text-muted-foreground">
           Jobs you&apos;ve marked as applied — track your search in one place.

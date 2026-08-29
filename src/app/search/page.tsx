@@ -29,7 +29,7 @@ function SearchResultsFallback() {
 export default function SearchPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:py-10">
-      <div className="relative overflow-hidden rounded-3xl border bg-card px-5 py-8 shadow-sm sm:px-8 sm:py-10">
+      <div className="relative z-20 overflow-visible rounded-3xl border bg-card px-5 py-8 shadow-sm sm:px-8 sm:py-10">
         <div
           className="pointer-events-none absolute -right-16 -top-20 size-64 rounded-full bg-primary/10 blur-3xl"
           aria-hidden
@@ -55,7 +55,7 @@ export default function SearchPage() {
         </div>
       </div>
 
-      <section className="mt-8 min-h-130" aria-label="Search results">
+      <section className="relative z-0 mt-8 min-h-130" aria-label="Search results">
         <Suspense fallback={<SearchResultsFallback />}>
           <SearchResults />
         </Suspense>

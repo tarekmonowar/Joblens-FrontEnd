@@ -19,7 +19,7 @@ import { RisingDecliningSkills } from '@/components/analytics/RisingDecliningSki
  */
 export default function AnalyticsPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <div className="mx-auto w-full min-w-0 max-w-7xl px-4 py-8">
       <div className="mb-6 sm:mb-8">
         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Market analytics</h1>
         <p className="mt-2 text-muted-foreground">

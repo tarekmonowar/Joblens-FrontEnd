@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { AuthShell } from '@/components/auth/AuthShell';
 import { useAuth } from '@/hooks/useAuth';
 
 type VerifyState = 'loading' | 'success' | 'error' | 'missing';
@@ -117,7 +118,7 @@ function VerifyEmailContent() {
 /** Verify-email route — Suspense boundary required for useSearchParams. */
 export default function VerifyEmailPage() {
   return (
-    <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center px-4 py-12">
+    <AuthShell>
       <Suspense
         fallback={
           <Card className="w-full max-w-md">
@@ -131,6 +132,6 @@ export default function VerifyEmailPage() {
       >
         <VerifyEmailContent />
       </Suspense>
-    </div>
+    </AuthShell>
   );
 }

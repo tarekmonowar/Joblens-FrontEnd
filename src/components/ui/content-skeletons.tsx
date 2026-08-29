@@ -61,12 +61,12 @@ export function AnalyticsCardSkeleton({
   className?: string;
 }) {
   return (
-    <Card className={cn('h-full w-full', className)} aria-hidden>
+    <Card className={cn('h-full w-full min-w-0 self-stretch', className)} aria-hidden>
       <CardHeader>
         <Skeleton className="h-5 w-36" />
         <Skeleton className="h-4 w-3/5" />
       </CardHeader>
-      <CardContent>
+      <CardContent className="min-w-0">
         <Skeleton className={cn('w-full rounded-lg', chartClassName)} />
       </CardContent>
     </Card>
