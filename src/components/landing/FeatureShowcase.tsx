@@ -25,7 +25,7 @@ const FILTER_CHIPS = [
 const ALERT_CADENCE = ['Instant', 'Daily', 'Weekly'] as const;
 
 const CELL =
-  'group relative flex h-full min-h-0 flex-col px-6 py-6 transition-colors hover:bg-muted/35 focus-visible:bg-muted/35';
+  'group relative flex h-full min-h-0 flex-col px-4 py-5 transition-colors hover:bg-muted/35 focus-visible:bg-muted/35 sm:px-6 sm:py-6';
 
 function Cell({
   href,
@@ -102,7 +102,7 @@ export function FeatureShowcase() {
 
   return (
     <section className="py-16 sm:py-24" aria-labelledby="toolkit-heading">
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto w-full max-w-7xl px-3 sm:px-4">
         <header className="mb-8 max-w-2xl">
           <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
             Toolkit · 06
@@ -120,7 +120,7 @@ export function FeatureShowcase() {
         </header>
 
         <div className="overflow-hidden rounded-2xl border bg-card">
-          <div className="flex h-11 items-center justify-between border-b bg-muted/40 px-6">
+          <div className="flex h-11 items-center justify-between border-b bg-muted/40 px-4 sm:px-6">
             <div className="flex items-center gap-2.5">
               <LiveDot />
               <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">

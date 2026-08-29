@@ -102,7 +102,7 @@ function MockResume({
 export function ResumeAiShowcase() {
   return (
     <section className="border-y bg-muted/30">
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-2 lg:gap-12">
+      <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-3 py-16 sm:px-4 sm:py-20 lg:grid-cols-2 lg:gap-12">
         {/* Copy + steps */}
         <motion.div
           className="w-full min-w-0"

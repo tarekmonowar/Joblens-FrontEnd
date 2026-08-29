@@ -38,7 +38,7 @@ const SOURCES = ['LinkedIn', 'Indeed', 'Glassdoor', 'BDJobs', 'More sources'] as
 /** Three-step pipeline explaining how job data flows through the platform. */
 export function HowItWorks() {
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
+    <section className="mx-auto w-full max-w-7xl px-3 py-16 sm:px-4 sm:py-20">
       <div className="mb-12 text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
           How it works
