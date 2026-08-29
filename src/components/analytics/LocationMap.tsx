@@ -12,7 +12,7 @@ import {
   ZoomableGroup,
 } from 'react-simple-maps';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { AnalyticsCardSkeleton } from '@/components/ui/content-skeletons';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { useLocations } from '@/hooks/useAnalytics';
 
@@ -32,7 +32,7 @@ export function LocationMap() {
   const [hovered, setHovered] = useState<string | null>(null);
 
   if (isLoading) {
-    return <Skeleton className="h-[420px] w-full rounded-xl" />;
+    return <AnalyticsCardSkeleton chartClassName="h-72" />;
   }
 
   if (isError || !data) {

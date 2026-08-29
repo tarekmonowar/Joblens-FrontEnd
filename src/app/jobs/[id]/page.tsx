@@ -22,19 +22,42 @@ type PageProps = {
 
 function DetailSkeleton() {
   return (
-    <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
-      <Skeleton className="h-8 w-2/3" />
-      <Skeleton className="h-4 w-1/3" />
-      <Skeleton className="h-64 w-full" />
+    <div className="mx-auto w-full max-w-3xl space-y-8 px-4 py-8" aria-hidden>
+      <Skeleton className="h-9 w-28" />
+      <div className="space-y-3">
+        <Skeleton className="h-8 w-2/3" />
+        <Skeleton className="h-4 w-1/3" />
+        <Skeleton className="h-4 w-1/2" />
+      </div>
+      <div className="flex gap-3">
+        <Skeleton className="h-10 w-32" />
+        <Skeleton className="h-10 w-28" />
+      </div>
+      <div className="space-y-3">
+        <Skeleton className="h-4 w-16" />
+        <div className="flex flex-wrap gap-2">
+          <Skeleton className="h-6 w-16 rounded-full" />
+          <Skeleton className="h-6 w-20 rounded-full" />
+          <Skeleton className="h-6 w-14 rounded-full" />
+        </div>
+      </div>
+      <div className="space-y-4">
+        <Skeleton className="h-6 w-32" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-11/12" />
+        <Skeleton className="h-4 w-4/5" />
+        <Skeleton className="h-36 w-full" />
+      </div>
     </div>
   );
 }
 
 export default function JobDetailPage({ params }: PageProps) {
   const { id } = use(params);
-  const { data: job, isLoading, isError, error, refetch } = useJob(id);
+  const { data: job, isPending, isError, error, refetch } = useJob(id);
 
-  if (isLoading) return <DetailSkeleton />;
+  if (isPending) return <DetailSkeleton />;
 
   if (isError || !job) {
     return (

@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ErrorState } from '@/components/ui/ErrorState';
 import { useMe, useUpdateProfile } from '@/hooks/useProfile';
 import { toastFormErrors } from '@/hooks/useAuth';
 
@@ -37,7 +38,7 @@ function parseSkills(text: string): string[] {
  * Editable career profile — saves via PATCH /users/me/profile.
  */
 export function ProfileForm() {
-  const { data: me, isLoading } = useMe();
+  const { data: me, isPending, isError, error, refetch } = useMe();
   const updateMutation = useUpdateProfile();
 
   const {
@@ -87,8 +88,40 @@ export function ProfileForm() {
     });
   };
 
-  if (isLoading) {
-    return <Skeleton className="h-80 w-full" />;
+  if (isPending) {
+    return (
+      <Card>
+        <CardHeader>
+          <Skeleton className="h-6 w-40" />
+          <Skeleton className="h-4 w-56" />
+        </CardHeader>
+        <CardContent className="space-y-5">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="space-y-2">
+              <Skeleton className="h-4 w-28" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          ))}
+          <Skeleton className="h-10 w-28" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Career profile</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ErrorState
+            message={error?.message ?? 'Could not load your profile'}
+            onRetry={() => void refetch()}
+          />
+        </CardContent>
+      </Card>
+    );
   }
 
   return (

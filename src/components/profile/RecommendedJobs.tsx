@@ -5,7 +5,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { JobCardSkeleton } from '@/components/ui/content-skeletons';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { JobCard } from '@/components/jobs/JobCard';
@@ -34,7 +34,7 @@ export function RecommendedJobs() {
         {isLoading && (
           <div className="grid gap-4 sm:grid-cols-2">
             {Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-48 w-full" />
+              <JobCardSkeleton key={i} />
             ))}
           </div>
         )}

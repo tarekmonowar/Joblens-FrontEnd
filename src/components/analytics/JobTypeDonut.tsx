@@ -4,7 +4,7 @@
 
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { AnalyticsCardSkeleton } from '@/components/ui/content-skeletons';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { useJobTypeBreakdown } from '@/hooks/useAnalytics';
 
@@ -17,7 +17,7 @@ export function JobTypeDonut() {
   const { data, isLoading, isError, refetch } = useJobTypeBreakdown();
 
   if (isLoading) {
-    return <Skeleton className="h-[380px] w-full rounded-xl" />;
+    return <AnalyticsCardSkeleton chartClassName="h-72" />;
   }
 
   if (isError || !data) {

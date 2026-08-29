@@ -8,6 +8,7 @@ import { SlidersHorizontal } from 'lucide-react';
 import { useJobFilters } from '@/hooks/useJobFilters';
 import { useOverview } from '@/hooks/useAnalytics';
 import { useJobsPage } from '@/hooks/useJobs';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useSocketEvent } from '@/hooks/useSocketEvent';
 import { FilterDrawer } from '@/components/jobs/FilterDrawer';
 import { PostedDropdown } from '@/components/jobs/PostedDropdown';
@@ -52,6 +53,7 @@ function JobsBoardContent() {
   const query = useJobsPage(filters, page, PAGE_SIZE);
   const { data: overview } = useOverview();
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
   // Local selection updates instantly; URL syncs via history.replaceState for shareable links.
   const [selectedId, setSelectedId] = useState<string | null>(selectedFromUrl);
 
@@ -90,8 +92,6 @@ function JobsBoardContent() {
   }, [reset]);
 
   // Prefer local selection; fall back to URL; on desktop auto-open the first row.
-  const isDesktop =
-    typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches;
   const activeSelectedId =
     selectedId ?? selectedFromUrl ?? (isDesktop && jobs[0] ? jobs[0].id : null);
 
@@ -163,11 +163,12 @@ function JobsBoardContent() {
           page={page}
           onPageChange={handleSetPage}
           onResetFilters={handleReset}
-          className="w-full lg:w-[400px] lg:shrink-0 xl:w-[440px]"
+          className="w-full lg:w-100 lg:shrink-0 xl:w-110"
         />
         <JobDetailPanel
           key={activeSelectedId ?? 'none'}
           jobId={activeSelectedId}
+          boardPending={query.isPending}
           className="hidden flex-1 lg:flex"
         />
       </div>
@@ -197,9 +198,18 @@ function JobsBoardContent() {
 
 function JobsBoardFallback() {
   return (
-    <div className="mx-auto w-full max-w-[1600px] space-y-4 px-3 py-8 sm:px-5">
-      <Skeleton className="h-9 w-40" />
-      <Skeleton className="h-[70vh] w-full" />
+    <div className="mx-auto flex h-[calc(100dvh-3.5rem)] w-full max-w-[1600px] flex-col px-3 sm:px-5">
+      <div className="flex shrink-0 items-center justify-between gap-3 py-3">
+        <Skeleton className="h-9 w-24" />
+        <div className="flex gap-2">
+          <Skeleton className="h-9 w-28" />
+          <Skeleton className="h-9 w-24" />
+        </div>
+      </div>
+      <div className="flex min-h-0 flex-1 gap-4 pb-3">
+        <Skeleton className="h-full w-full rounded-xl lg:w-100 lg:shrink-0 xl:w-110" />
+        <Skeleton className="hidden h-full flex-1 rounded-xl lg:block" />
+      </div>
     </div>
   );
 }

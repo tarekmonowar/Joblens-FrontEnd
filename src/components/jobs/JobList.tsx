@@ -48,7 +48,7 @@ export function JobList({
   onResetFilters,
   className,
 }: JobListProps) {
-  const { data, isLoading, isError, error, refetch, isFetching } = query;
+  const { data, isPending, isError, error, refetch, isFetching } = query;
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const jobs = data?.data ?? [];
@@ -78,7 +78,7 @@ export function JobList({
         className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
         aria-busy={isFetching}
       >
-        {isLoading ? (
+        {isPending ? (
           Array.from({ length: 8 }).map((_, i) => <RowSkeleton key={i} />)
         ) : isError ? (
           <div className="p-6">

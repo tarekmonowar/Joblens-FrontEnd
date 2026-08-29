@@ -4,22 +4,12 @@
 
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { Building2, Code2, MapPin, Search } from 'lucide-react';
 import { JobCard } from '@/components/jobs/JobCard';
-import { Skeleton } from '@/components/ui/skeleton';
+import { JobCardSkeleton } from '@/components/ui/content-skeletons';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { useSearch } from '@/hooks/useSearch';
-
-function JobCardSkeleton() {
-  return (
-    <div className="rounded-xl border bg-card p-4 space-y-3">
-      <Skeleton className="h-4 w-24" />
-      <Skeleton className="h-5 w-3/4" />
-      <Skeleton className="h-4 w-1/2" />
-      <Skeleton className="h-4 w-full" />
-    </div>
-  );
-}
 
 /**
  * Renders debounced search hits with infinite scroll and standard empty/error states.
@@ -31,7 +21,7 @@ export function SearchResults() {
   const query = useSearch(q);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+  const { data, isPending, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     query;
 
   const jobs = data?.pages.flatMap((p) => p.data) ?? [];
@@ -54,17 +44,35 @@ export function SearchResults() {
 
   if (q.length <= 1) {
     return (
-      <EmptyState
-        title="Start searching"
-        message="Type at least 2 characters to search across job titles, companies, and skills."
-      />
+      <div className="flex min-h-105 flex-col items-center justify-center rounded-3xl border border-dashed bg-muted/20 px-5 py-12 text-center">
+        <div className="flex size-16 items-center justify-center rounded-2xl border bg-card text-primary shadow-sm">
+          <Search className="size-7" aria-hidden />
+        </div>
+        <h2 className="mt-5 text-xl font-semibold">Search across every active role</h2>
+        <p className="mt-2 max-w-lg text-sm text-muted-foreground">
+          Enter at least two characters above. Try a role, company, skill, or location.
+        </p>
+        <div className="mt-7 grid w-full max-w-2xl gap-3 sm:grid-cols-3">
+          {[
+            { icon: Code2, label: 'Skills', example: 'React, Python, DevOps' },
+            { icon: Building2, label: 'Companies', example: 'Search hiring teams' },
+            { icon: MapPin, label: 'Location', example: 'Dhaka, Remote, Hybrid' },
+          ].map(({ icon: Icon, label, example }) => (
+            <div key={label} className="rounded-2xl border bg-card p-4 text-left shadow-sm">
+              <Icon className="size-4 text-primary" aria-hidden />
+              <p className="mt-3 text-sm font-semibold">{label}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{example}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     );
   }
 
-  if (isLoading) {
+  if (isPending) {
     return (
-      <div className="grid gap-4">
-        {Array.from({ length: 5 }).map((_, i) => (
+      <div className="grid gap-5 lg:grid-cols-2" aria-label="Loading search results">
+        {Array.from({ length: 4 }).map((_, i) => (
           <JobCardSkeleton key={i} />
         ))}
       </div>
@@ -90,21 +98,32 @@ export function SearchResults() {
   }
 
   return (
-    <div className="space-y-4">
-      <p className="text-sm text-muted-foreground">
-        {data?.pages[0]?.meta.total ?? jobs.length} result
-        {(data?.pages[0]?.meta.total ?? jobs.length) !== 1 ? 's' : ''} for &ldquo;
-        {q}&rdquo;
-      </p>
+    <div>
+      <div className="mb-5 flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+            Search results
+          </p>
+          <h2 className="mt-1 text-xl font-semibold">
+            {data?.pages[0]?.meta.total ?? jobs.length} match
+            {(data?.pages[0]?.meta.total ?? jobs.length) !== 1 ? 'es' : ''}
+          </h2>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Showing results for &ldquo;{q}&rdquo;
+        </p>
+      </div>
 
-      {jobs.map((job) => (
-        <JobCard key={job.id} job={job} />
-      ))}
+      <div className="grid items-stretch gap-5 lg:grid-cols-2">
+        {jobs.map((job) => (
+          <JobCard key={job.id} job={job} />
+        ))}
+      </div>
 
       <div ref={sentinelRef} className="h-4" aria-hidden />
 
       {isFetchingNextPage && (
-        <div className="grid gap-4">
+        <div className="mt-5 grid gap-5 lg:grid-cols-2">
           <JobCardSkeleton />
           <JobCardSkeleton />
         </div>

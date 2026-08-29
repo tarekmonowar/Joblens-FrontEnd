@@ -4,7 +4,7 @@
 
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { AnalyticsCardSkeleton } from '@/components/ui/content-skeletons';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { useDemandIndex } from '@/hooks/useAnalytics';
 
@@ -39,7 +39,7 @@ export function RisingDecliningSkills() {
   const { data, isLoading, isError, refetch } = useDemandIndex();
 
   if (isLoading) {
-    return <Skeleton className="h-[360px] w-full rounded-xl" />;
+    return <AnalyticsCardSkeleton chartClassName="h-64" />;
   }
 
   if (isError || !data) {

@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { AnalyticsCardSkeleton } from '@/components/ui/content-skeletons';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { useSkillTrends } from '@/hooks/useAnalytics';
 
@@ -37,7 +38,7 @@ export function SkillsCloud() {
   }, [data]);
 
   if (isLoading) {
-    return <Skeleton className="h-[360px] w-full rounded-xl" />;
+    return <AnalyticsCardSkeleton chartClassName="h-64" />;
   }
 
   if (isError || !data) {

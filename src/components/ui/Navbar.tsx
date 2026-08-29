@@ -5,7 +5,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Menu, X, User, LogOut, Briefcase, Bookmark, Bell, Shield, LogIn } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -68,6 +68,7 @@ function initials(name: string) {
 }
 
 function linkActive(pathname: string, href: string) {
+  if (pathname === '/jobs/applied' && href === '/jobs') return false;
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -84,10 +85,6 @@ export function Navbar() {
   const bg = barColor(pathname);
 
   const visibleLinks = NAV_LINKS.filter((link) => !link.auth || isAuthed);
-
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
 
   const handleLogout = async () => {
     await logout();
@@ -125,6 +122,7 @@ export function Navbar() {
           <div className="flex h-14 items-center gap-3 px-3 sm:h-16 sm:px-4">
             <Link
               href="/"
+              onClick={() => setMobileOpen(false)}
               className="flex shrink-0 items-center gap-2.5 focus-visible:rounded-md"
             >
               <Image

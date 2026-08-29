@@ -6,20 +6,20 @@ import { ProtectedRoute } from '@/components/ui/ProtectedRoute';
 import { JobCard } from '@/components/jobs/JobCard';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ErrorState } from '@/components/ui/ErrorState';
-import { Skeleton } from '@/components/ui/skeleton';
+import { JobCardSkeleton } from '@/components/ui/content-skeletons';
 import { Button } from '@/components/ui/button';
 import { useApplied, useUnapply } from '@/hooks/useApplications';
 import Link from 'next/link';
 
 function AppliedContent() {
-  const { data, isLoading, isError, error, refetch } = useApplied();
+  const { data, isPending, isError, error, refetch } = useApplied();
   const unapplyMutation = useUnapply();
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className="grid gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-40 w-full" />
+          <JobCardSkeleton key={i} />
         ))}
       </div>
     );
@@ -75,8 +75,22 @@ function AppliedContent() {
 
 /** Auth-required page listing jobs the user has applied to. */
 export default function AppliedJobsPage() {
+  const fallback = (
+    <div className="mx-auto w-full max-w-4xl px-4 py-8">
+      <h1 className="mb-2 text-2xl font-bold">Applied jobs</h1>
+      <p className="mb-6 text-sm text-muted-foreground">
+        Jobs you&apos;ve marked as applied — track your search in one place.
+      </p>
+      <div className="grid gap-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <JobCardSkeleton key={i} />
+        ))}
+      </div>
+    </div>
+  );
+
   return (
-    <ProtectedRoute>
+    <ProtectedRoute fallback={fallback}>
       <div className="mx-auto max-w-4xl px-4 py-8">
         <h1 className="mb-2 text-2xl font-bold">Applied jobs</h1>
         <p className="mb-6 text-sm text-muted-foreground">

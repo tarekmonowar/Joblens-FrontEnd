@@ -6,7 +6,7 @@ import { ProtectedRoute } from '@/components/ui/ProtectedRoute';
 import { SavedGrid } from '@/components/saved/SavedGrid';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ErrorState } from '@/components/ui/ErrorState';
-import { Skeleton } from '@/components/ui/skeleton';
+import { JobCardSkeleton } from '@/components/ui/content-skeletons';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -20,9 +20,9 @@ import { useUiStore } from '@/store/uiStore';
 import { useAuthStore } from '@/store/authStore';
 import { exportCsvUrl } from '@/lib/api/savedApi';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import toast from 'react-hot-toast';
-import { LayoutGrid, List } from 'lucide-react';
+import { Bookmark, Download, LayoutGrid, List } from 'lucide-react';
 
 function SavedContent() {
   const [sort, setSort] = useState<string>('latest');
@@ -51,46 +51,13 @@ function SavedContent() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="grid gap-4 sm:grid-cols-2">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-48 w-full" />
-        ))}
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <ErrorState
-        message={error?.message ?? 'Failed to load saved jobs'}
-        onRetry={() => void refetch()}
-      />
-    );
-  }
-
-  if (!data?.length) {
-    return (
-      <EmptyState
-        title="No saved jobs"
-        message="Tap the heart on any job card to save it here."
-        action={
-          <Button variant="outline" asChild>
-            <Link href="/jobs">Browse jobs</Link>
-          </Button>
-        }
-      />
-    );
-  }
-
   return (
     <>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">Sort</span>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border bg-card p-3 shadow-sm sm:p-4">
+        <div className="flex items-center gap-3">
+          <span className="hidden text-sm font-medium text-muted-foreground sm:inline">Sort by</span>
           <Select value={sort} onValueChange={setSort}>
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="w-37.5">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -120,27 +87,86 @@ function SavedContent() {
             <List className="size-4" />
           </Button>
           <Button type="button" variant="outline" size="sm" onClick={() => void downloadCsv()}>
-            Export CSV
+            <Download className="size-4" />
+            <span className="hidden sm:inline">Export CSV</span>
           </Button>
         </div>
       </div>
 
-      <SavedGrid items={data} />
+      {isLoading ? (
+        <div className="grid gap-5 md:grid-cols-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <JobCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : isError ? (
+        <div className="min-h-80 rounded-2xl border bg-card">
+          <ErrorState
+            message={error?.message ?? 'Failed to load saved jobs'}
+            onRetry={() => void refetch()}
+          />
+        </div>
+      ) : !data?.length ? (
+        <div className="min-h-80 rounded-2xl border bg-card">
+          <EmptyState
+            title="No saved jobs"
+            message="Save promising roles while you browse, then compare them and keep personal notes here."
+            action={
+              <Button asChild>
+                <Link href="/jobs">Explore jobs</Link>
+              </Button>
+            }
+          />
+        </div>
+      ) : (
+        <SavedGrid items={data} />
+      )}
     </>
+  );
+}
+
+function SavedPageSkeleton() {
+  return (
+    <SavedPageFrame>
+      <div className="mb-6 h-17.5 animate-pulse rounded-2xl border bg-accent" />
+      <div className="grid gap-5 md:grid-cols-2">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <JobCardSkeleton key={i} />
+        ))}
+      </div>
+    </SavedPageFrame>
+  );
+}
+
+function SavedPageFrame({ children }: { children: ReactNode }) {
+  return (
+    <div className="mx-auto w-full max-w-6xl px-4 py-8">
+      <div className="mb-7 flex items-start gap-4">
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+          <Bookmark className="size-5" aria-hidden />
+        </div>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+            Your shortlist
+          </p>
+          <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">Saved jobs</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Review bookmarked roles, add private notes, and export your shortlist.
+          </p>
+        </div>
+      </div>
+      {children}
+    </div>
   );
 }
 
 /** Auth-required saved jobs with notes and export. */
 export default function SavedPage() {
   return (
-    <ProtectedRoute>
-      <div className="mx-auto max-w-6xl px-4 py-8">
-        <h1 className="mb-2 text-2xl font-bold">Saved jobs</h1>
-        <p className="mb-6 text-sm text-muted-foreground">
-          Your bookmarked roles with personal notes.
-        </p>
+    <ProtectedRoute fallback={<SavedPageSkeleton />}>
+      <SavedPageFrame>
         <SavedContent />
-      </div>
+      </SavedPageFrame>
     </ProtectedRoute>
   );
 }

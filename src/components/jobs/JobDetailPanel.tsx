@@ -18,6 +18,8 @@ import { cn, formatJobListedTime } from '@/lib/utils';
 
 type JobDetailPanelProps = {
   jobId: string | null;
+  /** Keeps the detail pane in a loading state while the board finds its first job. */
+  boardPending?: boolean;
   /** Shown on mobile to close the full-screen detail overlay. */
   onBack?: () => void;
   className?: string;
@@ -29,8 +31,34 @@ const CONTAINER = 'flex h-full flex-col overflow-hidden rounded-xl border bg-car
  * Fetches and renders the selected job. Shows a placeholder when nothing is
  * selected, a skeleton while loading, and an error state on failure.
  */
-export function JobDetailPanel({ jobId, onBack, className }: JobDetailPanelProps) {
-  const { data: job, isLoading, isError, error, refetch } = useJob(jobId ?? '');
+export function JobDetailPanel({
+  jobId,
+  boardPending = false,
+  onBack,
+  className,
+}: JobDetailPanelProps) {
+  const { data: job, isPending, isError, error, refetch } = useJob(jobId ?? '');
+
+  if (boardPending || (jobId && isPending)) {
+    return (
+      <div className={cn(CONTAINER, className)}>
+        <div className="shrink-0 space-y-4 border-b px-5 py-5">
+          <Skeleton className="h-7 w-2/3" />
+          <Skeleton className="h-4 w-1/3" />
+          <div className="flex gap-2 pt-2">
+            <Skeleton className="h-9 w-28" />
+            <Skeleton className="h-9 w-24" />
+          </div>
+        </div>
+        <div className="min-h-0 flex-1 space-y-6 px-5 py-5">
+          <Skeleton className="h-6 w-48" />
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-6 w-36" />
+          <Skeleton className="h-48 w-full" />
+        </div>
+      </div>
+    );
+  }
 
   if (!jobId) {
     return (
@@ -40,19 +68,6 @@ export function JobDetailPanel({ jobId, onBack, className }: JobDetailPanelProps
             title="Select a job"
             message="Pick a role from the list to see the full details here."
           />
-        </div>
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className={cn(CONTAINER, className)}>
-        <div className="space-y-4 p-6">
-          <Skeleton className="h-7 w-2/3" />
-          <Skeleton className="h-4 w-1/3" />
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-64 w-full" />
         </div>
       </div>
     );

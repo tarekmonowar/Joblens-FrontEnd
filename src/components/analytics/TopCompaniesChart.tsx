@@ -13,7 +13,7 @@ import {
   YAxis,
 } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { AnalyticsCardSkeleton } from '@/components/ui/content-skeletons';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { useCompanies } from '@/hooks/useAnalytics';
 
@@ -27,7 +27,7 @@ export function TopCompaniesChart() {
   const { data, isLoading, isError, refetch } = useCompanies(10);
 
   if (isLoading) {
-    return <Skeleton className="h-[380px] w-full rounded-xl" />;
+    return <AnalyticsCardSkeleton chartClassName="h-80" />;
   }
 
   if (isError || !data) {

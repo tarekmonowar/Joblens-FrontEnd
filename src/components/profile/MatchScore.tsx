@@ -15,7 +15,7 @@ type MatchScoreProps = {
  * Radial percentage indicator for profile ↔ job market fit.
  */
 export function MatchScore({ size = 140 }: MatchScoreProps) {
-  const { data, isLoading, isError, error, refetch } = useMatchScore();
+  const { data, isPending, isError, error, refetch } = useMatchScore();
 
   const score = Math.min(100, Math.max(0, data?.score ?? 0));
   const stroke = 10;
@@ -23,14 +23,17 @@ export function MatchScore({ size = 140 }: MatchScoreProps) {
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (score / 100) * circumference;
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Match score</CardTitle>
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-4/5" />
         </CardHeader>
-        <CardContent className="flex justify-center py-6">
+        <CardContent className="flex flex-col items-center gap-5 py-4">
           <Skeleton className="rounded-full" style={{ width: size, height: size }} />
+          <Skeleton className="h-4 w-44" />
         </CardContent>
       </Card>
     );

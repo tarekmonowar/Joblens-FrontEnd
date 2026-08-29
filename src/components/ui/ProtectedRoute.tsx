@@ -10,13 +10,19 @@ import { useAuthStore } from '@/store/authStore';
 type ProtectedRouteProps = {
   children: ReactNode;
   requireAdmin?: boolean;
+  /** Page-shaped placeholder shown while the auth session is restored. */
+  fallback?: ReactNode;
 };
 
 /**
  * Wraps auth-required pages. Shows a skeleton while bootstrap runs,
  * redirects guests to /login?next=…, and blocks non-admins when requireAdmin.
  */
-export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
+export function ProtectedRoute({
+  children,
+  requireAdmin = false,
+  fallback,
+}: ProtectedRouteProps) {
   const router = useRouter();
   const pathname = usePathname();
   const { user, status } = useAuthStore();
@@ -36,8 +42,10 @@ export function ProtectedRoute({ children, requireAdmin = false }: ProtectedRout
   }, [status, user, requireAdmin, router, pathname]);
 
   if (status === 'idle') {
+    if (fallback) return <>{fallback}</>;
+
     return (
-      <div className="mx-auto max-w-4xl space-y-4 p-6">
+      <div className="mx-auto w-full max-w-6xl space-y-4 px-4 py-8">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-3/4" />

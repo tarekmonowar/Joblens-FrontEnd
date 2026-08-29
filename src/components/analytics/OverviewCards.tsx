@@ -68,7 +68,16 @@ export function OverviewCards() {
     return (
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {Array.from({ length: 5 }).map((_, i) => (
-          <Skeleton key={i} className="h-28 rounded-xl" />
+          <Card key={i} className="border-0 shadow-sm">
+            <CardContent className="flex items-start gap-4 p-6">
+              <Skeleton className="size-11 shrink-0 rounded-lg" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-7 w-20" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-3 w-4/5" />
+              </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
     );
