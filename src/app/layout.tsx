@@ -8,6 +8,8 @@ import { env } from '@/config/runtime';
 import { Providers } from '@/app/providers';
 import './globals.css';
 import { AIChatMessenger } from '@/components/aiMessenger/AIMessenger';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -58,6 +60,8 @@ export default function RootLayout({
         </Providers>
         <AIChatMessenger />
         <Footer />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
