@@ -7,6 +7,7 @@ import { SkipToContent } from '@/components/ui/SkipToContent';
 import { env } from '@/config/runtime';
 import { Providers } from '@/app/providers';
 import './globals.css';
+import { AIChatMessenger } from '@/components/aiMessenger/AIMessenger';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -23,8 +24,7 @@ export const metadata: Metadata = {
     default: env.appName,
     template: `%s | ${env.appName}`,
   },
-  description:
-    'Real-time Bangladesh job-market intelligence for software developers.',
+  description: 'Real-time Bangladesh job-market intelligence for software developers.',
   icons: {
     icon: [{ url: '/favicon.png', type: 'image/png' }],
     apple: '/favicon.png',
@@ -41,10 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full`}
-    >
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full`}>
       <body className="flex min-h-dvh flex-col">
         <Providers>
           <SkipToContent />
@@ -59,6 +56,7 @@ export default function RootLayout({
             </main>
           </PageTransition>
         </Providers>
+        <AIChatMessenger />
         <Footer />
       </body>
     </html>
