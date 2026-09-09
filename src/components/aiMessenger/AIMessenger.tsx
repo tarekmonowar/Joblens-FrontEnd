@@ -33,15 +33,15 @@ const PILL_PHRASES = ['Need help?', 'Ask Joblens', 'Chat now'];
 const PILL_INTERVAL_MS = 2400;
 const WELCOME_AUTO_DISMISS_MS = 12_000;
 const WELCOME_INITIAL_DELAY_MS = 1500;
+const HISTORY_LIMIT = 8;
 
-/** Controls how many characters are revealed per animation frame based on backlog size. */
+/** Reveal streamed text quickly so the UI does not lag behind the model. */
 function getCharsPerFrame(backlog: number): number {
   if (backlog <= 0) return 0;
-  if (backlog < 40) return 1;
-  if (backlog < 120) return 2;
-  if (backlog < 240) return 4;
-  if (backlog < 500) return 7;
-  return 12;
+  if (backlog < 24) return Math.min(backlog, 4);
+  if (backlog < 80) return 10;
+  if (backlog < 200) return 20;
+  return 40;
 }
 
 /* ─────────────────────── Markdown Renderers ─────────────────────── */
@@ -297,17 +297,14 @@ export function AIChatMessenger() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: history.map((m) => ({
+          messages: history.slice(-HISTORY_LIMIT).map((m) => ({
             role: m.sender === 'user' ? 'user' : 'assistant',
             content: m.content,
           })),
         }),
       });
 
-      const payload: unknown = await response.json().catch(() => null);
-      const markdown = extractAssistantMarkdown(payload);
-
-      if (!response.ok || !markdown) {
+      if (!response.ok) {
         throw new Error(`Server responded with ${response.status}`);
       }
 
@@ -325,6 +322,37 @@ export function AIChatMessenger() {
         },
       ]);
 
+      const contentType = response.headers.get('content-type') ?? '';
+
+      if (contentType.includes('text/plain')) {
+        if (!response.body) {
+          throw new Error('Response body is empty');
+        }
+
+        setIsThinking(false);
+        ensureAnimationRunning();
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          bufferRef.current += decoder.decode(value, { stream: true });
+          ensureAnimationRunning();
+        }
+
+        streamDoneRef.current = true;
+        ensureAnimationRunning();
+        return;
+      }
+
+      const payload: unknown = await response.json().catch(() => null);
+      const markdown = extractAssistantMarkdown(payload);
+      if (!markdown) {
+        throw new Error('Empty reply');
+      }
+
       setIsThinking(false);
       bufferRef.current = markdown;
       streamDoneRef.current = true;
@@ -335,15 +363,20 @@ export function AIChatMessenger() {
       streamDoneRef.current = true;
       activeAiIdRef.current = null;
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: nextMessageId('error'),
-          content: 'Sorry, the AI service is currently unavailable. Please try again.',
-          sender: 'ai',
-          timestamp: new Date(),
-        },
-      ]);
+      setMessages((prev) => {
+        const withoutEmptyStream = prev.filter(
+          (m) => !(m.sender === 'ai' && m.streaming && !m.content),
+        );
+        return [
+          ...withoutEmptyStream,
+          {
+            id: nextMessageId('error'),
+            content: 'Sorry, the AI service is currently unavailable. Please try again.',
+            sender: 'ai',
+            timestamp: new Date(),
+          },
+        ];
+      });
     } finally {
       setIsThinking(false);
     }

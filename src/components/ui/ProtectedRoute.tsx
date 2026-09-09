@@ -2,8 +2,9 @@
 
 // Client route guard — redirects guests to login and non-admins away from /admin.
 
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuthStore } from '@/store/authStore';
 
@@ -26,13 +27,17 @@ export function ProtectedRoute({
   const router = useRouter();
   const pathname = usePathname();
   const { user, status } = useAuthStore();
+  const redirected = useRef(false);
 
   useEffect(() => {
     if (status === 'idle') return;
 
     if (status === 'guest') {
-      const next = encodeURIComponent(pathname);
-      router.replace(`/login?next=${next}`);
+      if (!redirected.current) {
+        redirected.current = true;
+        toast.error('Please login first');
+        router.replace(`/login?next=${encodeURIComponent(pathname)}`);
+      }
       return;
     }
 
